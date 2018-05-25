@@ -1,6 +1,8 @@
 package com.example.userportal.controller;
 
-import java.awt.List;
+
+import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -15,38 +17,44 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.userportal.domain.User;
+import com.example.userportal.domain.dto.UserDto;
 import com.example.userportal.service.UserService;
 
 @CrossOrigin(origins = "http://localhost:4200", maxAge = 3600)
-@Controller
+@RestController
 @RequestMapping("/api")
 public class UserController {
 	
 	@Autowired
 	private UserService userService;
 	
-	@PostMapping
-	public User create(@RequestBody User user) {
-		return userService.create(user);
+	@PostMapping()
+	public String create(@RequestBody UserDto userDto) {
+		String msg =  userService.create(userDto.getUser());
+		if(msg == "code") {
+			return "created";
+		}else {
+			return "not created";
+		}
 	}
 	
-	@GetMapping(path = {"/{id}"})
-	public User fineOne(@PathVariable("id") int id) {
-		return userService.findById(id);
+	@GetMapping(path = {"/{esId}"})
+	public Map<String, Object> fineOne(@PathVariable("esId") String esId) {
+		return userService.findById(esId);
 	}
 	
-	@PutMapping
-	public User update(@RequestBody User user) {
-		return userService.update(user);
+	@PutMapping("/{esId}")
+	public Boolean update(@RequestBody User user, @PathVariable("esId") String esId) {
+		return userService.update(user,  esId);
 	}
 	
-	@DeleteMapping(path = {"/{id}"})
-	public User delete(@PathVariable("id") int id) {
-		return userService.delete(id);
+	@DeleteMapping(path = {"/{esId}"})
+	public Boolean delete(@PathVariable("esId") String esId) {
+		return userService.delete(esId);
 	}
 	
 	@GetMapping
-	public List findAll() {
+	public List<Map<String, Object>> findAll() {
 		return userService.findAll();
 	}
 

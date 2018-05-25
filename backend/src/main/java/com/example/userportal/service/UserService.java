@@ -1,14 +1,18 @@
 package com.example.userportal.service;
 
-import java.awt.List;
+
+
+
+import java.util.List;
+import java.util.Map;
 
 import com.example.userportal.domain.User;
 
 public interface UserService {
 
-	public User create(User user);
-	public User delete(int id);
-	public List findAll();
-	public User findById(int id);
-	public User update(User user);
+	public String create(User user);
+	public Boolean delete(String esId);
+	public List<Map<String, Object>> findAll();
+	public Map<String, Object> findById(String esId);
+	public Boolean update(User user, String esId);
 }

@@ -1,8 +1,8 @@
 package com.example.userportal.service.impl;
 
-import java.awt.List;
 
-
+import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,35 +20,38 @@ public class UserServiceImpl implements UserService{
 	private UserRepository userRepository;
 	
 	@Override
-	public User create(User user) {
+	public String create(User user) {
 		
 		return userRepository.save(user);
 	}
 
 	@Override
-	public User delete(int id) {
-		User user = findById(id);
+	public Boolean delete(String esId) {
+		Map<String, Object> user = findById(esId);
 		if(user != null) {
-			userRepository.delete(user);
+			userRepository.delete(esId);
+			return true;
 		}
-		return user;
+		else {
+			return false;
+		}
 	}
 
 	@Override
-	public List findAll() {
+	public List<Map<String, Object>> findAll() {
 		// TODO Auto-generated method stub
 		return userRepository.findAll();
 	}
 
 	@Override
-	public User findById(int id) {
-		return userRepository.findOne(id);
+	public Map<String, Object> findById(String esId) {
+		return userRepository.findOne(esId);
 	}
 
 	@Override
-	public User update(User user) {
+	public Boolean update(User user, String esId) {
 		// TODO Auto-generated method stub
-		return null;
+		return userRepository.update(user, esId);
 	}
 
 }
