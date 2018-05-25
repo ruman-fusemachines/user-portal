@@ -102,22 +102,17 @@ public class UserRepositoryImpl implements UserRepository{
 	@Override
 	public List<Map<String, Object>> findAll() {
 		SearchRequestBuilder srb = this.esClient.getClient().prepareSearch(employeeIndex).setTypes(employeeType);
-		BoolQueryBuilder mainBoolQuery = new BoolQueryBuilder();
-		BoolQueryBuilder subBoolQuery = new BoolQueryBuilder();
-		subBoolQuery.should(QueryBuilders.matchAllQuery());
-		mainBoolQuery.must(subBoolQuery);
-		srb = srb.setQuery(mainBoolQuery);
+		srb = srb.setQuery(QueryBuilders.matchAllQuery());
 		
 		List<Map<String, Object>> users = new ArrayList<>();
-		Map<String, Object> finalResult = new LinkedHashMap<String, Object>();
 		SearchResponse responses = srb.get();
 		
 		for (SearchHit searchHit : responses.getHits().getHits()) {
+			Map<String, Object> finalResult = new LinkedHashMap<String, Object>();
 			finalResult.put("id", searchHit.getId());
 			finalResult.putAll(searchHit.getSourceAsMap());
 			users.add(finalResult);
 		}
-		
 		return users;
 	}
 
